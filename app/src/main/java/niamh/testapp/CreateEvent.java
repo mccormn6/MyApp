@@ -33,20 +33,21 @@ import android.widget.Toast;
 /**
  * Created by niamh on 4/1/15.
  */
-public class Create_Event extends MainActivity {
+public class CreateEvent extends MainActivity {
 
 
-        private Spinner choose_sport;
-        private Button btnSubmit;
-        private TextView createevent;
-        //private Context context;
-        private int byGetOrPost = 0;
-        EditText pace, distance, location, time, date;
+    private Spinner choose_sport;
+    private Button btnSubmit;
+    MainActivity main = new MainActivity();
+    //private Context context;
+    private int byGetOrPost = 0;
+    EditText pace, distance, location, time, date;
+
     //flag 0 means get and 1 means post.(By default it is get.)
-    public Create_Event(Spinner choose_sport, Button btnSubmit,
-                          TextView createevent, EditText pace, EditText distance, EditText location, EditText time, EditText date) {
+    public CreateEvent(Spinner choose_sport, Button btnSubmit,
+                       EditText pace, EditText distance, EditText location, EditText time, EditText date) {
 
-        }
+    }
 
 
        /* @Override
@@ -58,29 +59,28 @@ public class Create_Event extends MainActivity {
 */
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
-        createevent = (TextView) findViewById(R.id.createevent);
         btnSubmit = (Button) findViewById(R.id.btnSubmit);
-        location = (EditText)findViewById(R.id.location);
-        time = (EditText)findViewById(R.id.time);
-        distance = (EditText)findViewById(R.id.distance);
-        date = (EditText)findViewById(R.id.date);
-        pace   = (EditText)findViewById(R.id.pace);
-        choose_sport = (Spinner)findViewById(R.id.choose_sport);
+        location = (EditText) findViewById(R.id.location);
+        time = (EditText) findViewById(R.id.time);
+        distance = (EditText) findViewById(R.id.distance);
+        date = (EditText) findViewById(R.id.date);
+        pace = (EditText) findViewById(R.id.pace);
+        choose_sport = (Spinner) findViewById(R.id.choose_sport);
         btnSubmit.setOnClickListener(
-                new View.OnClickListener()
-                {
-                    public void onClick(View view)
-                    {
-                        Log.v("EditText", pace.getText().toString());
-                        Log.v("EditText", location.getText().toString());
-                        Log.v("EditText", distance.getText().toString());
-                        Log.v("EditText", time.getText().toString());
-                        Log.v("EditText", date.getText().toString());
-                        Log.v("Spinner", choose_sport.getSelectedItem().toString());
+                new View.OnClickListener() {
+                    public void onClick(View view) {
+                        try {
+                            pace.getText();
+                            location.getText();
+                            distance.getText();
+                            time.getText();
+                            date.getText();
+                            choose_sport.getSelectedItem();
+                        } catch (NumberFormatException ex) {
+                        }
                     }
                 });
     }
@@ -101,57 +101,33 @@ public class Create_Event extends MainActivity {
             //@Override
             public void onClick(View v) {
 
-                        Toast.makeText(Create_Event.this,
-                                "OnClickListener : " +
-                                        //"\nSpinner 1 : "+ String.valueOf(spinner1.getSelectedItem()) +
-                                        "\nSpinner 2 : "+ String.valueOf(choose_sport.getSelectedItem()),
-                                Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateEvent.this,
+                        "OnClickListener : " +
+                                //"\nSpinner 1 : "+ String.valueOf(spinner1.getSelectedItem()) +
+                                "\nSpinner 2 : " + String.valueOf(choose_sport.getSelectedItem()),
+                        Toast.LENGTH_SHORT).show();
             }
 
         });
     }
+}
         //@Override
-        protected String doInBackground(String... arg0) {
-            if(byGetOrPost == 0){ //means by Get Method
-                try{
-                    String sport = String.valueOf(choose_sport.getSelectedItem());
-                    //String time = time;
-                    String link = "http://testtraintogether.site88.net/create.php";
-                    URL url = new URL(link);
-                    HttpClient client = new DefaultHttpClient();
-                    HttpGet request = new HttpGet();
-                    request.setURI(new URI(link));
-                    HttpResponse response = client.execute(request);
-                    BufferedReader in = new BufferedReader
-                            (new InputStreamReader(response.getEntity().getContent()));
-
-                    StringBuffer sb = new StringBuffer("");
-                    String line="";
-                    while ((line = in.readLine()) != null) {
-                        sb.append(line);
-                        break;
-                    }
-                    in.close();
-                    return sb.toString();
-                }catch(Exception e){
-                    return new String("Exception: " + e.getMessage());
-                }
-            }
-            else{
-                try{
-                    String username = (String)arg0[0];
-                    String password = (String)arg0[1];
+     /*   protected String doInBackground(String... arg0) {
+                    try{
                     String link="http://testtraintogether.site88.net/create.php";
-                    String data  = URLEncoder.encode("username", "UTF-8")
-                            + "=" + URLEncoder.encode(username, "UTF-8");
-                    data += "&" + URLEncoder.encode("password", "UTF-8")
-                            + "=" + URLEncoder.encode(password, "UTF-8");
+                   // String data  = URLEncoder.encode("location", "UTF-8")
+                 // +          + "=" + URLEncoder.encode(location, "UTF-8");
+                     //   Double data = URLEncoder.encode("pace", "UTF-8")
+                     //           + "=" + URLEncoder.encode(pace, "UTF-8")
+                  //  data += "&" + URLEncoder.encode("pace", "UTF-8")
+                           // + "=" + URLEncoder.encode(pace, "UTF-8");
+                     String data = ;
                     URL url = new URL(link);
                     URLConnection conn = url.openConnection();
                     conn.setDoOutput(true);
                     OutputStreamWriter wr = new OutputStreamWriter
                             (conn.getOutputStream());
-                    wr.write( data );
+                  //  wr.write( data );
                     wr.flush();
                     BufferedReader reader = new BufferedReader
                             (new InputStreamReader(conn.getInputStream()));
@@ -253,5 +229,5 @@ public class Create_Event extends MainActivity {
     }
     */
 
-}
+
 
