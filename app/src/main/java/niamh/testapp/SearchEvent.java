@@ -88,6 +88,7 @@ public class SearchEvent  extends MainActivity {
     }
     private void onBackgroundTaskDataObtained(String result) {
 
+
         setContentView(R.layout.view_event);
         sportField1 = (TextView) findViewById(R.id.sport);
         distanceField1 = (TextView) findViewById(R.id.distance);
@@ -95,6 +96,7 @@ public class SearchEvent  extends MainActivity {
         timeField = (TextView) findViewById(R.id.time);
         dateField = (TextView) findViewById(R.id.date);
         locationField = (TextView) findViewById(R.id.location);
+        Button attend = (Button) findViewById(R.id.attend);
         try
 
         {
@@ -121,6 +123,8 @@ public class SearchEvent  extends MainActivity {
             timeField.setText("The time is " +time);
             dateField.setText("The date is " +date);
                 locationField.setText("The location is " +location);
+
+            //Button attend = (Button) findViewById(R.id.attend);
 
 
 
