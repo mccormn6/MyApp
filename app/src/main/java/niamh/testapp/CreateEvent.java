@@ -25,6 +25,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
@@ -80,7 +81,7 @@ public class CreateEvent  extends MainActivity {
 
         context = this;
         btnSubmit = (Button) findViewById((R.id.btnSubmit));
-        // sportChoose = (Spinner) findViewById(R.id.choose_sport);
+      sportChoose = (Spinner) findViewById(R.id.choose_sport);
         distanceField = (EditText) findViewById(R.id.distanceField);
         paceField = (EditText) findViewById(R.id.paceField);
         timeField = (EditText) findViewById(R.id.timeField);
@@ -126,30 +127,26 @@ public class CreateEvent  extends MainActivity {
                 String time = (String) arg0[3];
                 String date = (String) arg0[4];
                 String location = (String) arg0[5];
-                String data = URLEncoder.encode("sport", "UTF-8")
-                        + "=" + URLEncoder.encode(sport, "UTF-8")
-                        + URLEncoder.encode("distance", "UTF-8")
-                        + "=" + URLEncoder.encode(distance, "UTF-8")
-                        + URLEncoder.encode("pace", "UTF-8")
-                        + "=" + URLEncoder.encode(pace, "UTF-8")
-                        + URLEncoder.encode("time", "UTF-8")
-                        + "=" + URLEncoder.encode(time, "UTF-8")
-                        + URLEncoder.encode("date", "UTF-8")
-                        + "=" + URLEncoder.encode(date, "UTF-8")
-                        + URLEncoder.encode("location", "UTF-8")
-                        + "=" + URLEncoder.encode(location, "UTF-8");
-                //  data += "&" + URLEncoder.encode("password", "UTF-8")
-                //        + "=" + URLEncoder.encode(password, "UTF-8");
-                URL url = new URL(link);
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter wr = new OutputStreamWriter
-                        (conn.getOutputStream());
-                wr.write(data);
-                wr.flush();
-                BufferedReader reader = new BufferedReader
-                        (new InputStreamReader(conn.getInputStream()));
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://testtraintogether.site88.net/create.php");
+
+
+                // Add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("sport", sport));
+                nameValuePairs.add(new BasicNameValuePair("distance", distance));
+                nameValuePairs.add(new BasicNameValuePair("pace", pace));
+                nameValuePairs.add(new BasicNameValuePair("time", time));
+                nameValuePairs.add(new BasicNameValuePair("date", date));
+               nameValuePairs.add(new BasicNameValuePair("location", location));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+                InputStream is = response.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 StringBuilder sb = new StringBuilder();
+
                 String line = null;
                 // Read Server Response
                 while ((line = reader.readLine()) != null) {
@@ -159,9 +156,9 @@ public class CreateEvent  extends MainActivity {
                 return sb.toString();
 
             } catch (Exception e) {
-                return new String("Exception: " + e.getMessage());
+                String result = "Error" + e.getMessage();
+                return result;
             }
-
         }
 
     protected void onPostExecute(String result) {
