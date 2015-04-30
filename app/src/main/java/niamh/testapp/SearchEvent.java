@@ -35,7 +35,7 @@ import niamh.testapp.MainActivity;
 import niamh.testapp.R;
 
 public class SearchEvent  extends MainActivity {
-    public TextView statusField, resultField, resultField2, timeField, dateField, locationField, sportField1,
+    public TextView  timeField, dateField, locationField, sportField1, searchevent,
     distanceField1, paceField1;
     private Spinner sportChoose;
     Object returnValue[] = new Object[6];
@@ -57,7 +57,7 @@ public class SearchEvent  extends MainActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        searchevent = (TextView)findViewById((R.id.searchevent));
         context = this;
         btnSubmit = (Button) findViewById((R.id.search));
         // sportChoose = (Spinner) findViewById(R.id.choose_sport);
@@ -65,16 +65,14 @@ public class SearchEvent  extends MainActivity {
         //paceField = (EditText) findViewById(R.id.paceField);
         paceField = (EditText) findViewById(R.id.paceField);
 
-        resultField = (TextView) findViewById(R.id.resultField);
-        resultField2 = (TextView) findViewById(R.id.resultField);
+
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
 
             // @Override
             public void onClick(View view) {
 
-                resultField = (TextView) findViewById(R.id.resultField);
-                resultField2 = (TextView) findViewById(R.id.resultField2);
+
                 distance = distanceField.getText().toString();
                 pace = paceField.getText().toString();
 
@@ -88,8 +86,11 @@ public class SearchEvent  extends MainActivity {
     }
     private void onBackgroundTaskDataObtained(String result) {
 
+        try
 
+        {
         setContentView(R.layout.view_event);
+
         sportField1 = (TextView) findViewById(R.id.sport);
         distanceField1 = (TextView) findViewById(R.id.distance);
         paceField1 = (TextView) findViewById(R.id.paceField);
@@ -97,44 +98,45 @@ public class SearchEvent  extends MainActivity {
         dateField = (TextView) findViewById(R.id.date);
         locationField = (TextView) findViewById(R.id.location);
         Button attend = (Button) findViewById(R.id.attend);
-        try
 
-        {
 
-                JSONArray jArray = new JSONArray(result);
-                JSONObject json_data = jArray.getJSONObject(0);
-                returnValue[0] = (json_data.getString("sport"));
-            returnValue[1] = (json_data.getString("distance"));
-            returnValue[2] = (json_data.getString("pace"));
-            returnValue[3] = (json_data.getString("time"));
-            returnValue[4] = (json_data.getString("date"));
-                returnValue[5] = (json_data.getString("location"));
+            JSONArray jArray = new JSONArray(result);
+            JSONObject json_data = jArray.getJSONObject(0);
+            returnValue[0] = (json_data.getString("eventid"));
+            returnValue[1] = (json_data.getString("sport"));
+            returnValue[2] = (json_data.getString("distance"));
+            returnValue[3] = (json_data.getString("pace"));
+            returnValue[4] = (json_data.getString("time"));
+            returnValue[5] = (json_data.getString("date"));
+            returnValue[6] = (json_data.getString("location"));
 
-                String sport = json_data.getString("sport");
-                String location = json_data.getString("location");
+            final String eventid = json_data.getString("eventid");
+            String sport = json_data.getString("sport");
+            String location = json_data.getString("location");
             String pace = json_data.getString("pace");
             String distance = json_data.getString("distance");
-            String time= json_data.getString("time");
+            String time = json_data.getString("time");
             String date = json_data.getString("date");
 
-                sportField1.setText("The sport is " + sport );
-            distanceField1.setText("The distance is " +distance);
-            paceField1.setText("The pace is " +pace);
-            timeField.setText("The time is " +time);
-            dateField.setText("The date is " +date);
-                locationField.setText("The location is " +location);
+            sportField1.setText("The sport is " + sport);
+            distanceField1.setText("The distance is " + distance);
+            paceField1.setText("The pace is " + pace);
+            timeField.setText("The time is " + time);
+            dateField.setText("The date is " + date);
+            locationField.setText("The location is " + location);
 
-            //Button attend = (Button) findViewById(R.id.attend);
+            attend.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    new attendEvent().execute(eventid);
+                }
 
 
+                //@Override
+            });
+        } catch (JSONException e) {
+            Log.e("log_tag", "Error parsing data" + e.toString());
 
-
-            }
-
-            catch (JSONException e){
-                Log.e("log_tag", "Error parsing data" +e.toString());
-            }
-        //@Override
+        }
     }
 
 
@@ -187,33 +189,67 @@ public class SearchEvent  extends MainActivity {
             protected void onPostExecute(String result) {
 
                 SearchEvent.this.onBackgroundTaskDataObtained(result);
-                // int i = 0;
-          /*  try
 
-            {
-
-              /*  JSONArray jArray = new JSONArray(result);
-                JSONObject json_data = jArray.getJSONObject(0);
-                returnValue[0] = (json_data.getString("sport"));
-                returnValue[1] = (json_data.getString("location"));
-               /* return json_data;
-                String sport = json_data.getString("sport");
-                String location = json_data.getString("location");
-                resultField.setText("The sport is " + sport );
-                resultField2.setText("The location is " +location);
-            }
-
-            catch (JSONException e){
-                Log.e("log_tag", "Error parsing data" +e.toString());
-            }
-
-        }*/
 
 
             }
         }
+    class attendEvent extends AsyncTask<String, Void, String> {
 
+
+        protected String doInBackground(String... arg0) {
+
+            try {
+
+                //  String link = "http://testtraintogether.site88.net/create.php";
+                String distance = (String) arg0[0];
+                String pace = (String) arg0[1];
+
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("http://testtraintogether.site88.net/search.php");
+
+
+                // Add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("distance", distance));
+                nameValuePairs.add(new BasicNameValuePair("pace", pace));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+                InputStream is = response.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+
+                StringBuilder sb = new StringBuilder();
+
+                String line = null;
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+
+                    sb.append(line + "\n");
+
+                    break;
+                }
+                return sb.toString();
+
+            } catch (Exception e) {
+                String result = "error " + e.getMessage();
+                return result;
+            }
+        }
+
+
+        protected void onPostExecute(String result) {
+
+            SearchEvent.this.onBackgroundTaskDataObtained(result);
+
+
+        }
     }
+    }
+
+
 
 
 

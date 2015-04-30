@@ -52,25 +52,7 @@ public class CreateEvent  extends MainActivity {
     private String result;
     Spinner choose_sport;
     String sport, distance, pace, date, time, location = null;
-    MainActivity main = new MainActivity();
 
-    //flag 0 means get and 1 means post.(By default it is get.)
-    /*public CreateEvent(Context context, Button btnSubmit, Spinner sportChoose, EditText distanceField,
-                       EditText paceField, EditText timeField, EditText dateField, EditText locationField,
-            TextView resultField) {
-        // this.context = context;
-        this.context = context;
-        this.btnSubmit = btnSubmit;
-        this.sportChoose = sportChoose;
-        this.distanceField = distanceField;
-        this.paceField = paceField;
-        this.timeField = timeField;
-        this.dateField = dateField;
-        this.locationField = locationField;
-        this.resultField = resultField;
-
-    }
-*/
     public CreateEvent() {
     }
 
@@ -119,8 +101,6 @@ public class CreateEvent  extends MainActivity {
 
         protected String doInBackground(String... arg0) {
             try {
-
-                String link = "http://testtraintogether.site88.net/create.php";
                 String sport = (String) arg0[0];
                 String distance = (String) arg0[1];
                 String pace = (String) arg0[2];
