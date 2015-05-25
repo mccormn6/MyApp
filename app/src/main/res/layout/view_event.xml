@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Event Details"
+        android:text="Your Events"
         android:id="@+id/viewevents" />
     <TextView
         android:layout_width="wrap_content"
@@ -61,12 +61,31 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/location" />
 
+  <!--  <Button
+        android:id="@+id/attend"
+        android:layout_width="156dp"
+        android:layout_height="wrap_content"
+
+        android:layout_toRightOf="@+id/search"
+        android:onClick="onCreate2"
+
+        android:text="Attend Event" />
+
     <Button
+        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/attend"
-        android:layout_gravity="center_horizontal" />
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignLeft="@+id/textView2"
+        android:text="Search Other Events" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="You are attending this event!"
+        android:id="@+id/textView10" />
+-->
 
 </LinearLayout>
